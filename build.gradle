@@ -1,0 +1,56 @@
+	buildscript {
+	ext { 
+		springBootVersion = '1.0.2.RELEASE' 
+		springVersion = "4.0.4.RELEASE"	
+	}
+	repositories { mavenCentral() }
+	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+	baseName = 'gradle-web-ui'
+	version =  '0.0.1-SNAPSHOT'
+}
+
+def toolingApiVersion = gradle.gradleVersion
+
+repositories {
+    maven {
+        url 'http://repo.gradle.org/gradle/libs-releases-local'
+    }
+    mavenCentral()
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-data-rest:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+//	compile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+	compile("org.springframework.boot:spring-boot-starter-websocket:$springBootVersion")
+	compile("org.springframework:spring-messaging:$springVersion")
+	compile "org.gradle:gradle-tooling-api:${toolingApiVersion}"
+	compile "org.gradle:gradle-core:${toolingApiVersion}"
+	compile 'org.webjars:angular-ui-bootstrap:0.11.0-2'
+	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+	
+	compile 'org.webjars:stomp-websocket:2.3.0'
+	compile 'org.webjars:sockjs-client:0.3.4'
+	compile "org.webjars:lodash:2.4.1-1"
+}
+
+task wrapper(type: Wrapper) { gradleVersion = '1.12' }
+eclipse {
+
+	project {
+
+
+		buildCommand "org.springframework.ide.eclipse.core.springbuilder"
+
+		natures "org.springsource.ide.eclipse.gradle.core.nature", "org.springframework.ide.eclipse.core.springnature"
+	}
+}
